@@ -59,8 +59,37 @@ const updateBlog = asyncHandler(async (req, res) => {
   res.status(200).json(response);
 });
 
+//Get all Blogs skeleton
+const getAllBlogsSkeleton = asyncHandler(async (req, res) => {
+  try {
+    const response = await BlogModel.find({}).select(
+      "title author blogContent"
+    );
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(404);
+    throw new Error(error.message);
+  }
+});
+
+//Get Specific Blog
+const getSpecificBlog = asyncHandler(async (req, res) => {
+  try {
+    const { id } = req.params;
+    const response = await BlogModel.findById(id).select(
+      "imageURL title author blogContent"
+    );
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(404);
+    throw new Error("Can't able to find the blog");
+  }
+});
+
 module.exports = {
   createBlog,
   getMyBlogs,
   updateBlog,
+  getAllBlogsSkeleton,
+  getSpecificBlog,
 };
