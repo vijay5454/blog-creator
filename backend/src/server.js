@@ -17,7 +17,7 @@ app.use(InvalidPathHandler);
 
 const startServer = async () => {
   const response = await connectDB();
-  app.listen(5000, () => {
+  await app.listen(5000, () => {
     console.log("Server listening from port 5000");
   });
 };

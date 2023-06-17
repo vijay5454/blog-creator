@@ -15,7 +15,7 @@ const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
   if (!name || !email || !password) {
     res.status(400);
-    throw new Error("Invalid request");
+    throw new Error("Please Fill all Fields");
   }
   const userExists = await UserModel.findOne({ email });
   if (userExists) {
@@ -46,9 +46,13 @@ const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
     res.status(400);
-    throw new Error("Invalid request");
+    throw new Error("Please Enter required Field!");
   }
   const user = await UserModel.findOne({ email });
+  if (user === null) {
+    res.status(400);
+    throw new Error("User not Found!");
+  }
   const compareFlag = await bcrypt.compare(password, user.password);
   if (user && compareFlag) {
     res.status(200).json({
