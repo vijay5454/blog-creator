@@ -32,6 +32,7 @@ const registerUser = asyncHandler(async (req, res) => {
     });
     const { _id } = response;
     res.status(200).json({
+      name,
       message: "User created successfully!",
       token: generateToken(_id),
     });
@@ -56,6 +57,7 @@ const loginUser = asyncHandler(async (req, res) => {
   const compareFlag = await bcrypt.compare(password, user.password);
   if (user && compareFlag) {
     res.status(200).json({
+      name: user.name,
       token: generateToken(user._id),
     });
   } else {
