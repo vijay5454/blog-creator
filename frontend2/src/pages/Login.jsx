@@ -35,6 +35,11 @@ const Login = () => {
   const { user } = useSelector((state) => {
     return state.auth;
   });
+  useEffect(() => {
+    if (user !== null) {
+      toast.info("Login successful!");
+    }
+  }, [user]);
   if (user !== null) {
     return <Navigate to="/" />;
   }

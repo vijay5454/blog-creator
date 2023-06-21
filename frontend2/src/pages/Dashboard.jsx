@@ -39,7 +39,7 @@ const Dashboard = () => {
     <section className="max-w-3xl text-center mx-auto mt-12">
       <h1 className="text-4xl">Welcome {name}</h1>
       {data.length === 0 ? (
-        <p className="text-xl">No Blogs found. Create one please.</p>
+        <p className="text-xl mt-3">No Blogs found. Create one please.</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-5">
           {data.map((eachBlog) => {

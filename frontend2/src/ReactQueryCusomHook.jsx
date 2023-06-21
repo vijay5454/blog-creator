@@ -1,8 +1,11 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { saveToken } from "./feature/authSlice";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { closeCreateModal } from "./feature/modalSlice";
+import { closeUpdateModal } from "./feature/modalSlice";
 
 const API_BASE = "http://localhost:5000/api";
 
@@ -89,5 +92,48 @@ export const useGetPersonalBlogs = () => {
     isError,
     isLoading,
     error,
+  };
+};
+
+//Used to Create the Blog
+export const useCreateBlog = () => {
+  const queryClient = useQueryClient();
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => {
+    return state.auth;
+  });
+  const {
+    mutate: createBlog,
+    error,
+    isError,
+    isLoading,
+  } = useMutation({
+    mutationFn: async (requestPayload) => {
+      const response = await axios.post(
+        API_BASE + "/blogs/create",
+        requestPayload,
+        {
+          headers: {
+            Authorization: `Bearer ${user}`,
+          },
+        }
+      );
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["FetchPersonalBlogs"],
+      });
+      dispatch(closeCreateModal());
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+  return {
+    createBlog,
+    error,
+    isError,
+    isLoading,
   };
 };

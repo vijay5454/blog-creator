@@ -11,7 +11,7 @@ const Singleblog = ({ blog }) => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center gap-3 border border-white rounded-lg p-3">
+    <div className="flex flex-col justify-center items-center gap-2 border border-white rounded-lg p-3">
       <div className="w-full flex justify-end">
         <button onClick={handleUpdateModal}>
           <BiEditAlt />
