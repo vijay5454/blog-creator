@@ -21,10 +21,20 @@ const Home = () => {
   }
   return (
     <section className="max-w-3xl mx-auto mt-14">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {data.map((eachBlog) => {
-          return <BlogCard key={eachBlog._id} blog={eachBlog} />;
-        })}
+      <div
+        className={
+          data.length === 0
+            ? "text-center text-2xl"
+            : "grid grid-cols-1 md:grid-cols-3 gap-8"
+        }
+      >
+        {data.length === 0 ? (
+          <p>Sorry, No Blogs Found</p>
+        ) : (
+          data.map((eachBlog) => {
+            return <BlogCard key={eachBlog._id} blog={eachBlog} />;
+          })
+        )}
       </div>
     </section>
   );
