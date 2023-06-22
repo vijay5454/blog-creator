@@ -125,6 +125,7 @@ export const useCreateBlog = () => {
         queryKey: ["FetchPersonalBlogs"],
       });
       dispatch(closeCreateModal());
+      toast.info("Creation of Blog is Successful");
     },
     onError: (error) => {
       toast.error(error.message);
@@ -132,6 +133,88 @@ export const useCreateBlog = () => {
   });
   return {
     createBlog,
+    error,
+    isError,
+    isLoading,
+  };
+};
+
+//Used to Update Blog
+export const useUpdateBlog = () => {
+  const queryClient = useQueryClient();
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => {
+    return state.auth;
+  });
+  const {
+    mutate: updateBlog,
+    error,
+    isError,
+    isLoading,
+  } = useMutation({
+    mutationFn: async ([id, requestPayload]) => {
+      const response = await axios.post(
+        API_BASE + "/blogs/" + id,
+        requestPayload,
+        {
+          headers: {
+            Authorization: `Bearer ${user}`,
+          },
+        }
+      );
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["FetchPersonalBlogs"],
+      });
+      dispatch(closeUpdateModal());
+      toast.info("Update Successful!");
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+  return {
+    updateBlog,
+    error,
+    isError,
+    isLoading,
+  };
+};
+
+//Used to Delete Blog
+export const useDeleteBlog = () => {
+  const queryClient = useQueryClient();
+  const { user } = useSelector((state) => {
+    return state.auth;
+  });
+  const {
+    mutate: deleteBlog,
+    error,
+    isError,
+    isLoading,
+  } = useMutation({
+    mutationFn: async (id) => {
+      const response = await axios.delete(API_BASE + "/blogs/" + id, {
+        headers: {
+          Authorization: `Bearer ${user}`,
+        },
+      });
+      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["FetchPersonalBlogs"],
+      });
+      toast.info("Blog deleted Successful");
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+  return {
+    deleteBlog,
     error,
     isError,
     isLoading,

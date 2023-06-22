@@ -1,7 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import { closeCreateModal, closeUpdateModal } from "../feature/modalSlice";
 import { useEffect, useState } from "react";
-import { useCreateBlog } from "../ReactQueryCusomHook";
+import { useCreateBlog, useUpdateBlog } from "../ReactQueryCusomHook";
+import { resetBlogData } from "../feature/eachBlogSlice";
 
 const Modal = () => {
   //State to hold data for Modal
@@ -19,6 +20,7 @@ const Modal = () => {
     imageURL: selectedImgUrl,
     title: selectedTitle,
     blogContent: selectedBlog,
+    id: selectedBlogId,
   } = useSelector((state) => {
     return state.blog;
   });
@@ -39,6 +41,7 @@ const Modal = () => {
   const handleModal = () => {
     dispatch(closeCreateModal());
     dispatch(closeUpdateModal());
+    dispatch(resetBlogData());
   };
   //Handle the Change of Value in the Modal
   const handleChange = (e) => {
@@ -48,10 +51,16 @@ const Modal = () => {
   };
   //Handle Submit Form
   const { createBlog } = useCreateBlog();
+  const { updateBlog } = useUpdateBlog();
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form submitted!");
-    createBlog(modalData);
+    if (createModal) {
+      createBlog(modalData);
+    }
+    if (updateModal) {
+      updateBlog([selectedBlogId, modalData]);
+    }
   };
   return (
     <div className="backdrop-blur-md h-screen absolute inset-0">

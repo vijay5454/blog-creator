@@ -86,10 +86,23 @@ const getSpecificBlog = asyncHandler(async (req, res) => {
   }
 });
 
+//Delete blog
+const deleteUserBlog = asyncHandler(async (req, res) => {
+  try {
+    const { id } = req.params;
+    const response = await BlogModel.findByIdAndDelete(id);
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(404);
+    throw new Error("Can't able to delete the blog");
+  }
+});
+
 module.exports = {
   createBlog,
   getMyBlogs,
   updateBlog,
   getAllBlogsSkeleton,
   getSpecificBlog,
+  deleteUserBlog,
 };
