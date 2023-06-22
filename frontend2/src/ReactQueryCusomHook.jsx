@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import { closeCreateModal } from "./feature/modalSlice";
 import { closeUpdateModal } from "./feature/modalSlice";
 
-const API_BASE = "http://localhost:5000/api";
+const API_BASE = "https://blog-server-6bh5.onrender.com/api";
 
 //Used to Login the User
 export const useLogin = () => {
