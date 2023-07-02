@@ -19,9 +19,7 @@ const createBlog = asyncHandler(async (req, res) => {
     throw new Error("Please give all required values");
   }
   try {
-    console.log(imageURL.slice(0, 30));
     const photoUrl = await cloudinary.uploader.upload(imageURL);
-    console.log(photoUrl);
     const dbResponse = await BlogModel.create({
       author: name,
       user: _id,
