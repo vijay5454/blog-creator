@@ -7,9 +7,9 @@ import { resetBlogData } from "../feature/eachBlogSlice";
 const Modal = () => {
   //State to hold data for Modal
   const [modalData, setModalData] = useState({
-    imageURL: "",
     title: "",
     blogContent: "",
+    imageURL: null,
   });
   const { imageURL, title, blogContent } = modalData;
   //To know which Modal is opened and set the data if it is Update Modal
@@ -49,6 +49,19 @@ const Modal = () => {
       return { ...prevState, [e.target.name]: e.target.value };
     });
   };
+  const handleFileChange = (e) => {
+    console.log(e.target.files[0]);
+    const reader = new FileReader();
+    reader.readAsDataURL(e.target.files[0]);
+    reader.onload = () => {
+      setModalData((prevState) => {
+        return { ...prevState, imageURL: reader.result };
+      });
+    };
+    reader.onerror = () => {
+      console.log("error occured while uploading img");
+    };
+  };
   //Handle Submit Form
   const { createBlog } = useCreateBlog();
   const { updateBlog } = useUpdateBlog();
@@ -74,14 +87,21 @@ const Modal = () => {
         {createModal && <h1 className="text-center text-2xl">Create Blog</h1>}
         {updateModal && <h1 className="text-center text-2xl">Update Blog</h1>}
         <form className="max-w-5xl mx-auto" onSubmit={handleSubmit}>
-          <input
-            type="text"
-            placeholder="Image URL"
-            className="block w-[75%] mx-auto mt-5 px-1 py-3 focus:outline-none focus:ring focus:ring-green-300 rounded-md text-black"
-            value={imageURL}
-            onChange={handleChange}
-            name="imageURL"
-          />
+          {updateModal && (
+            <input
+              type="text"
+              placeholder="Image URL"
+              className="block w-[75%] mx-auto mt-5 px-1 py-3 focus:outline-none focus:ring focus:ring-green-300 rounded-md text-black"
+              value={imageURL}
+              onChange={handleChange}
+              name="imageURL"
+            />
+          )}
+          {createModal && (
+            <div className="flex justify-center items-center mt-5 mb-3">
+              <input type="file" onChange={handleFileChange} />
+            </div>
+          )}
           <input
             type="text"
             placeholder="Title"

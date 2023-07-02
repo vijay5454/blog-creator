@@ -1,5 +1,12 @@
 const asyncHandler = require("express-async-handler");
 const BlogModel = require("../models/BlogModel");
+const { v2: cloudinary } = require("cloudinary");
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 //Create Blog
 const createBlog = asyncHandler(async (req, res) => {
@@ -11,10 +18,11 @@ const createBlog = asyncHandler(async (req, res) => {
     throw new Error("Please give all required values");
   }
   try {
+    const photoUrl = await cloudinary.uploader.upload(imageURL);
     const dbResponse = await BlogModel.create({
       author: name,
       user: _id,
-      imageURL,
+      imageURL: photoUrl.url,
       title,
       blogContent,
     });
