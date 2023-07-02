@@ -10,6 +10,7 @@ cloudinary.config({
 
 //Create Blog
 const createBlog = asyncHandler(async (req, res) => {
+  console.log("Entered Create Blog");
   const user = req.user;
   const { name, email, _id } = user;
   const { imageURL, title, blogContent } = req.body;
@@ -19,6 +20,7 @@ const createBlog = asyncHandler(async (req, res) => {
   }
   try {
     const photoUrl = await cloudinary.uploader.upload(imageURL);
+    console.log(photoUrl);
     const dbResponse = await BlogModel.create({
       author: name,
       user: _id,
